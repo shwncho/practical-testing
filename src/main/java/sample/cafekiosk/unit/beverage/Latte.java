@@ -1,4 +1,4 @@
-package sample.unit.beverage;
+package sample.cafekiosk.unit.beverage;
 
 public class Latte implements Beverage{
     @Override
