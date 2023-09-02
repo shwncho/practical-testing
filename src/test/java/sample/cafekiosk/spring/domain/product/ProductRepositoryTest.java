@@ -100,4 +100,49 @@ class ProductRepositoryTest {
                 );
     }
 
+    @Test
+    @DisplayName("가장 마지막으로 저장한 상품의 상품번호를 읽어온다.")
+    void findLatestProductNumber() throws Exception {
+
+        //given
+        String targetProductNumber = "003";
+        Product product = Product.builder()
+                .productNumber("001")
+                .type(ProductType.HANDMADE)
+                .sellingType(ProductSellingType.SELLING)
+                .name("아메리카노")
+                .price(4000)
+                .build();
+
+        Product product2 = Product.builder()
+                .productNumber("002")
+                .type(ProductType.HANDMADE)
+                .sellingType(ProductSellingType.HOLD)
+                .name("카페라떼")
+                .price(4500)
+                .build();
+
+        Product product3 = Product.builder()
+                .productNumber(targetProductNumber)
+                .type(ProductType.HANDMADE)
+                .sellingType(ProductSellingType.STOP_SELLING)
+                .name("팥빙수")
+                .price(7000)
+                .build();
+        productRepository.saveAll(List.of(product,product2,product3));
+        //when
+        String latestProductNumber = productRepository.findLatestProduct();
+        //then
+        assertThat(latestProductNumber).isEqualTo(targetProductNumber);
+    }
+
+    @Test
+    @DisplayName("가장 마지막으로 저장한 상품의 상품번호를 읽어올 때, 상품이 하나도 없는 경우에는 null을 반환한다")
+    void findLatestProductNumberWhenProductIsEmpty() throws Exception {
+
+        //when
+        String latestProductNumber = productRepository.findLatestProduct();
+        //then
+        assertThat(latestProductNumber).isNull();
+    }
 }
